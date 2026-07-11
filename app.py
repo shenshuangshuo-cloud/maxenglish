@@ -542,6 +542,14 @@ def serve_audio(filename):
     if os.path.exists(file_path):
         return send_file(file_path, mimetype='audio/mpeg')
 
+    # Fallback: strip leading "audio/" or "audio\" prefix
+    # Fixes path doubling: /api/audio/audio/dict_1.mp3 -> audio/audio/dict_1.mp3
+    if filename.lower().startswith('audio/') or filename.lower().startswith('audio\\'):
+        stripped = filename.split('/', 1)[1] if '/' in filename else filename.split('\\', 1)[1]
+        file_path = os.path.join(AUDIO_DIR, stripped)
+        if os.path.exists(file_path):
+            return send_file(file_path, mimetype='audio/mpeg')
+
     return jsonify({'error': '音频文件不存在'}), 404
 
 
