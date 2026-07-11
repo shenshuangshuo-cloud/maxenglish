@@ -1,0 +1,495 @@
+/* ========== Login Page ========== */
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--white);
+    padding: 24px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 48px 40px;
+    box-shadow: var(--shadow-md);
+}
+
+.login-brand {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.login-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: var(--red);
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Login Options */
+.login-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-option:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.login-option-guest {
+    border-left: 3px solid var(--green);
+}
+
+.login-option-wechat {
+    border-left: 3px solid #07C160;
+}
+
+.login-option-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 44px;
+    text-align: center;
+}
+
+.login-option-body {
+    flex: 1;
+}
+
+.login-option-body h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.login-option-body p {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.login-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.login-btn-guest {
+    background: var(--green);
+    color: var(--white);
+}
+
+.login-btn-guest:hover {
+    background: #15803D;
+    transform: translateY(-1px);
+}
+
+.login-btn-wechat {
+    background: #07C160;
+    color: var(--white);
+}
+
+.login-btn-wechat:hover {
+    background: #06AD56;
+    transform: translateY(-1px);
+}
+
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Status message */
+.login-status {
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    margin-top: 16px;
+}
+
+.login-status.loading {
+    background: #FFF8E1;
+    color: #F9A825;
+}
+
+.login-status.error {
+    background: var(--red-error-bg);
+    color: var(--red-error);
+}
+
+/* ========== Guest Banner (in index page) ========== */
+.guest-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 32px;
+    background: #FFF8E1;
+    border-bottom: 1px solid #FFE082;
+    font-size: 13px;
+    color: #795548;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.guest-banner-text {
+    flex: 1;
+}
+
+.guest-banner .btn-wechat-banner {
+    padding: 6px 14px;
+    background: #07C160;
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.guest-banner .btn-wechat-banner:hover {
+    background: #06AD56;
+}
+
+/* User info in header */
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.user-avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--red-light);
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.user-nickname {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-guest-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.btn-logout {
+    padding: 4px 10px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-logout:hover {
+    background: var(--bg);
+}
+
+/* Stage progress badge */
+.stage-progress-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #07C160;
+    background: #E8F5E9;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+/* ========== Responsive: Tablet (≤768px) ========== */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 40px 28px;
+        max-width: 380px;
+    }
+
+    .login-title { font-size: 22px; }
+    .guest-banner { padding: 10px 20px; }
+}
+
+/* ========== Responsive: Mobile (≤480px) ========== */
+@media (max-width: 480px) {
+    .login-page {
+        padding: 0;
+        min-height: 100vh;
+        background: var(--white);
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        padding: 40px 20px 32px;
+        min-height: 100vh;
+    }
+
+    .login-brand { margin-bottom: 32px; }
+    .login-title { font-size: 22px; }
+    .login-subtitle { font-size: 13px; }
+
+    .login-option {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+    }
+
+    .login-option-icon {
+        font-size: 26px;
+        width: 38px;
+    }
+
+    .login-option-body h3 { font-size: 14px; }
+    .login-option-body p { font-size: 12px; }
+
+    .login-btn {
+        padding: 12px 18px;
+        font-size: 14px;
+        min-height: 42px;
+    }
+
+    .login-btn:active {
+        transform: scale(0.96);
+    }
+
+    /* Guest banner */
+    .guest-banner {
+        padding: 10px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+    }
+
+    .guest-banner .btn-wechat-banner {
+        width: 100%;
+        text-align: center;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    /* Header user */
+    .user-nickname { font-size: 13px; max-width: 90px; }
+
+    /* Modal */
+    .modal-card {
+        width: 90vw;
+        padding: 24px;
+        border-radius: 10px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .modal-btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+}
+
+/* ========== Admin Login Option ========== */
+.login-option-admin {
+    border-left: 3px solid #6B7280;
+}
+
+.login-btn-admin {
+    background: #6B7280;
+    color: var(--white);
+}
+
+.login-btn-admin:hover {
+    background: #4B5563;
+    transform: translateY(-1px);
+}
+
+/* ========== Modal Overlay ========== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: var(--white);
+    border-radius: 12px;
+    width: 380px;
+    max-width: 90vw;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.modal-form .form-group {
+    margin-bottom: 16px;
+}
+
+.modal-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.modal-form input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.modal-form input:focus {
+    outline: none;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.modal-error {
+    font-size: 13px;
+    color: var(--red-error);
+    background: var(--red-error-bg);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.modal-error.hidden {
+    display: none;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-btn-cancel {
+    background: var(--bg);
+    color: var(--text-secondary);
+}
+
+.modal-btn-cancel:hover {
+    background: var(--border);
+}
+
+.modal-btn-primary {
+    background: var(--red);
+    color: var(--white);
+}
+
+.modal-btn-primary:hover {
+    background: #B91C1C;
+}
+
+.modal-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

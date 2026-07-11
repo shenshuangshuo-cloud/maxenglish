@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroEnglish - 管理后台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="admin-header">
+        <div class="admin-header-inner">
+            <a href="/admin" class="admin-brand">MicroEnglish 管理后台</a>
+            <nav class="admin-nav">
+                <a href="#" class="admin-nav-link active" data-tab="users">用户管理</a>
+                <a href="#" class="admin-nav-link" data-tab="audios">音频管理</a>
+            </nav>
+            <div class="admin-header-right">
+                <span class="admin-nickname" id="admin-nickname"></span>
+                <button class="admin-btn-logout" id="btn-admin-logout">退出</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <!-- 用户管理 -->
+        <section class="admin-tab" id="tab-users">
+            <div class="admin-section-header">
+                <h2>用户管理</h2>
+                <div class="admin-stats" id="users-stats"></div>
+            </div>
+            <div class="admin-toolbar">
+                <input type="text" id="user-search" class="admin-search" placeholder="搜索昵称/账号...">
+                <button class="admin-btn admin-btn-primary" id="btn-user-search">搜索</button>
+            </div>
+            <div class="admin-table-wrap">
+                <table class="admin-table" id="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>昵称</th>
+                            <th>账号</th>
+                            <th>角色</th>
+                            <th>注册时间</th>
+                            <th>最后登录</th>
+                            <th>学习记录</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <tr><td colspan="8" class="admin-table-loading">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin-pagination" id="users-pagination"></div>
+        </section>
+
+        <!-- 音频管理 -->
+        <section class="admin-tab hidden" id="tab-audios">
+            <div class="admin-section-header">
+                <h2>音频管理</h2>
+                <div class="admin-stats" id="audios-stats"></div>
+            </div>
+            <div class="admin-toolbar">
+                <label class="admin-btn admin-btn-primary" id="btn-audio-upload-trigger">
+                    上传新音频
+                    <input type="file" id="audio-file-input" accept="audio/mp3,audio/wav,audio/ogg,audio/mp4" hidden>
+                </label>
+                <select id="audio-exercise-filter" class="admin-select">
+                    <option value="">全部练习集</option>
+                </select>
+            </div>
+            <div class="admin-table-wrap">
+                <table class="admin-table" id="audios-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>听写句</th>
+                            <th>音频文件</th>
+                            <th>所属练习集</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audios-tbody">
+                        <tr><td colspan="5" class="admin-table-loading">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- 用户进度详情模态框 -->
+    <div id="progress-modal-overlay" class="modal-overlay hidden">
+        <div class="modal-card modal-card-lg">
+            <h2 class="modal-title" id="progress-modal-title">学习进度详情</h2>
+            <div id="progress-modal-body" class="modal-body-scroll"></div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="btn-progress-close">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 上传音频关联选择模态框 -->
+    <div id="upload-modal-overlay" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2 class="modal-title">选择关联的听写句</h2>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label>音频文件：<span id="upload-filename"></span></label>
+                </div>
+                <div class="form-group">
+                    <label for="upload-dictation-select">关联听写句</label>
+                    <select id="upload-dictation-select" class="admin-select"></select>
+                </div>
+                <div id="upload-error" class="modal-error hidden"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="btn-upload-cancel">取消</button>
+                <button class="modal-btn modal-btn-primary" id="btn-upload-confirm">确认上传</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
