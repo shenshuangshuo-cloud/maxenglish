@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaxEnglish - 英语听力听写</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">M</span>
+                <span class="logo-text">MaxEnglish</span>
+            </div>
+            <div class="header-user" id="header-user">
+                <!-- 动态渲染 -->
+            </div>
+            <nav class="header-nav">
+                <a href="#" class="nav-link" id="btn-admin">管理后台</a>
+            </nav>
+        </header>
+
+        <!-- 游客提示条 -->
+        <div id="guest-banner" class="guest-banner hidden">
+            <span class="guest-banner-text">你是游客模式，学习进度不会被保存。</span>
+            <button id="btn-wechat-banner" class="btn-wechat-banner">微信登录以记录进度</button>
+        </div>
+
+        <!-- 练习列表页 -->
+        <main id="page-list" class="page active">
+            <div class="page-hero">
+                <h2 class="hero-title">选择你的水平</h2>
+                <p class="hero-subtitle">Select Your Level</p>
+            </div>
+            <div id="stage-container" class="stage-container"></div>
+        </main>
+
+        <!-- 文章列表页 -->
+        <main id="page-articles" class="page">
+            <div class="articles-topbar">
+                <button id="btn-articles-back" class="btn-back">← 返回级别</button>
+                <h2 id="articles-level-title" class="articles-heading">Level 6</h2>
+                <span id="articles-stage-tag" class="level-tag">大学</span>
+            </div>
+            <div id="articles-container" class="articles-container"></div>
+        </main>
+
+        <!-- 听写练习页 -->
+        <main id="page-practice" class="page">
+            <div class="practice-topbar">
+                <button id="btn-back" class="btn-back">← 返回列表</button>
+                <h2 id="practice-title" class="practice-heading">练习标题</h2>
+                <span id="practice-level" class="level-tag">Lv.1</span>
+            </div>
+            <div class="practice-progress">
+                <span id="progress-text">1 / 5</span>
+                <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+            </div>
+
+            <div class="dictation-card">
+                <div class="dictation-index">第 <span id="dict-index">1</span> 句</div>
+                <div class="dictation-play-area">
+                    <button id="btn-play" class="btn-play" title="播放/暂停">
+                        <svg class="icon-play" viewBox="0 0 24 24" width="28" height="28"><polygon points="7,5 19,12 7,19" fill="currentColor"/></svg>
+                        <svg class="icon-pause" viewBox="0 0 24 24" width="28" height="28"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>
+                    </button>
+                    <span id="play-hint-text" class="play-hint">点击播放</span>
+                </div>
+                <div id="cell-grid" class="cell-grid"></div>
+                <div id="accuracy-area" class="accuracy-area hidden"></div>
+                <div class="dictation-toolbar">
+                    <span id="toolbar-progress" class="toolbar-progress">第 1/5 句</span>
+                    <button id="btn-check" class="btn btn-submit">Check</button>
+                    <div class="toolbar-icons">
+                        <button id="btn-hint" class="toolbar-icon-btn" title="提示">💡</button>
+                        <button id="btn-reveal" class="toolbar-icon-btn" title="显示答案">👁</button>
+                        <button id="btn-reset" class="toolbar-icon-btn" title="重新开始">🔄</button>
+                    </div>
+                </div>
+                <button id="btn-next" class="btn btn-primary hidden" style="width:100%;margin-top:12px;">下一句 →</button>
+                <div class="dict-note" id="dict-note-display"></div>
+            </div>
+        </main>
+
+        <!-- 完成页 -->
+        <main id="page-complete" class="page">
+            <div class="complete-card">
+                <h2>练习完成</h2>
+                <div class="score-circle">
+                    <span id="score-percent">0%</span>
+                </div>
+                <p class="score-label">正确率</p>
+                <div class="score-stats">
+                    <div class="stat">
+                        <span class="stat-num" id="score-correct">0</span>
+                        <span class="stat-label">正确</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num" id="score-total">0</span>
+                        <span class="stat-label">总计</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num" id="score-wrong">0</span>
+                        <span class="stat-label">错误</span>
+                    </div>
+                </div>
+                <div class="complete-actions">
+                    <button id="btn-retry" class="btn btn-primary">再来一次</button>
+                    <button id="btn-back-list" class="btn btn-outline-red">返回列表</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
