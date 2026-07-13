@@ -14,6 +14,7 @@ class DictationApp {
         this.apiBase = '';
         this.user = null;         // current user info from /api/auth/status
         this.isGuest = true;
+        this.state = 'level-grid'; // 'level-grid' | 'articles' | 'practice' | 'result'
 
         this.init();
     }
@@ -165,24 +166,33 @@ class DictationApp {
     }
 
     // ==================== Page Nav ====================
+    // Core rule: only ONE page region is visible at a time; all others are hidden (display:none).
     showPage(page) {
         [this.el.pageList, this.el.pageArticles, this.el.pagePractice, this.el.pageComplete].forEach(el => el.classList.remove('active'));
         page.classList.add('active');
     }
 
-    goToList() {
+    // Show Level 3x3 grid only. Hide article list and practice containers entirely.
+    showLevelGrid() {
         this.stopAudio();
         this.currentLevel = null;
+        this.state = 'level-grid';
         this.showPage(this.el.pageList);
     }
 
+    // Back to current level's article list (used by practice / result pages).
     goToArticles() {
         this.stopAudio();
         if (this.currentLevel !== null) {
             this.showArticles(this.currentLevel);
         } else {
-            this.goToList();
+            this.showLevelGrid();
         }
+    }
+
+    // Alias kept for backward compatibility (logo click etc.)
+    goToList() {
+        this.showLevelGrid();
     }
 
     // ==================== Data Loading ====================
@@ -237,6 +247,7 @@ class DictationApp {
 
     async showArticles(level) {
         this.currentLevel = level;
+        this.state = 'articles';
 
         // Fetch exercises for this level from API (for fresh progress data)
         let levelExercises = [];
@@ -295,6 +306,7 @@ class DictationApp {
     }
 
     async startExercise(exerciseId) {
+        this.state = 'practice';
         try {
             const resp = await fetch(`${this.apiBase}/api/exercises/${exerciseId}`);
             if (!resp.ok) throw new Error('练习集不存在');
@@ -674,6 +686,7 @@ class DictationApp {
 
     finishPractice() {
         this.stopAudio();
+        this.state = 'result';
         const correctCount = this.results.filter(r => r === 'correct').length;
         const total = this.dictations.length;
         const wrongCount = total - correctCount;
@@ -685,6 +698,7 @@ class DictationApp {
     }
 
     retryPractice() {
+        this.state = 'practice';
         this.currentDictIndex = 0;
         this.results = new Array(this.dictations.length).fill(null);
         this.renderPracticeInfo();
