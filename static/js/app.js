@@ -3,6 +3,7 @@ class DictationApp {
     constructor() {
         this.exercises = [];
         this.currentExercise = null;
+        this.currentLevel = null;  // current level for article list navigation
         this.currentDictIndex = 0;
         this.dictations = [];
         this.results = [];        // per-sentence result: 'correct' | 'wrong' | null
@@ -21,9 +22,14 @@ class DictationApp {
     init() {
         this.el = {
             pageList: document.getElementById('page-list'),
+            pageArticles: document.getElementById('page-articles'),
             pagePractice: document.getElementById('page-practice'),
             pageComplete: document.getElementById('page-complete'),
-            stageContainer: document.getElementById('stage-container'),
+            levelGrid: document.getElementById('level-grid'),
+            articlesContainer: document.getElementById('articles-container'),
+            articlesLevelTitle: document.getElementById('articles-level-title'),
+            articlesStageTag: document.getElementById('articles-stage-tag'),
+            btnArticlesBack: document.getElementById('btn-articles-back'),
             btnBack: document.getElementById('btn-back'),
             btnPlay: document.getElementById('btn-play'),
             btnCheck: document.getElementById('btn-check'),
@@ -56,7 +62,8 @@ class DictationApp {
     }
 
     bindEvents() {
-        this.el.btnBack.addEventListener('click', () => this.goToList());
+        this.el.btnBack.addEventListener('click', () => this.goToArticles());
+        this.el.btnArticlesBack.addEventListener('click', () => this.goToList());
         this.el.btnPlay.addEventListener('click', () => this.togglePlay());
         this.el.btnCheck.addEventListener('click', () => this.checkAnswer());
         this.el.btnHint.addEventListener('click', () => this.showHint());
@@ -64,14 +71,14 @@ class DictationApp {
         this.el.btnReset.addEventListener('click', () => this.resetSentence());
         this.el.btnNext.addEventListener('click', () => this.nextDictation());
         this.el.btnRetry.addEventListener('click', () => this.retryPractice());
-        this.el.btnBackList.addEventListener('click', () => this.goToList());
+        this.el.btnBackList.addEventListener('click', () => this.goToArticles());
 
         if (this.el.btnWechatBanner) {
             this.el.btnWechatBanner.addEventListener('click', () => this.wechatLogin());
         }
 
         document.querySelector('.logo').addEventListener('click', () => {
-            if (!this.el.pageList.classList.contains('active')) this.goToList();
+            this.goToList();
         });
 
         const adminBtn = document.getElementById('btn-admin');
@@ -159,13 +166,23 @@ class DictationApp {
 
     // ==================== Page Nav ====================
     showPage(page) {
-        [this.el.pageList, this.el.pagePractice, this.el.pageComplete].forEach(el => el.classList.remove('active'));
+        [this.el.pageList, this.el.pageArticles, this.el.pagePractice, this.el.pageComplete].forEach(el => el.classList.remove('active'));
         page.classList.add('active');
     }
 
     goToList() {
         this.stopAudio();
+        this.currentLevel = null;
         this.showPage(this.el.pageList);
+    }
+
+    goToArticles() {
+        this.stopAudio();
+        if (this.currentLevel !== null) {
+            this.showArticles(this.currentLevel);
+        } else {
+            this.goToList();
+        }
     }
 
     // ==================== Data Loading ====================
@@ -176,63 +193,105 @@ class DictationApp {
             this.exercises = await resp.json();
             this.renderStages();
         } catch (err) {
-            this.el.stageContainer.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">加载失败，请确认后端已启动</p>';
+            this.el.levelGrid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">加载失败，请确认后端已启动</p>';
         }
     }
 
     renderStages() {
-        const stageOrder = [
-            { name: '小学', desc: '日常简单用语，基本问候和交流' },
-            { name: '初中', desc: '日常生活常见话题，简单讨论' },
-            { name: '高中', desc: '较复杂话题，较流利交流' },
-            { name: '大学', desc: '复杂话题，各种文本理解' },
-            { name: '英语专业', desc: '专业级语言运用' },
-            { name: '高端外语人才', desc: '精通，自如深度沟通' },
-        ];
-
-        const grouped = {};
+        // Aggregate exercises by level: count articles and total dictations
+        const levelMap = {};
         this.exercises.forEach(ex => {
-            if (!grouped[ex.stage]) grouped[ex.stage] = [];
-            grouped[ex.stage].push(ex);
+            if (!levelMap[ex.level]) {
+                levelMap[ex.level] = { dictationCount: 0, articleCount: 0, doneCount: 0 };
+            }
+            levelMap[ex.level].dictationCount += (ex.dictation_count || 0);
+            levelMap[ex.level].articleCount += 1;
+            levelMap[ex.level].doneCount += (ex.completed_count || 0);
         });
 
+        // Build 3x3 grid: Level 1 to Level 9
         let html = '';
-        stageOrder.forEach(stage => {
-            const exs = grouped[stage.name] || [];
-            if (exs.length === 0) return;
-            exs.sort((a, b) => a.level - b.level);
+        for (let lv = 1; lv <= 9; lv++) {
+            const info = levelMap[lv] || { dictationCount: 0, articleCount: 0, doneCount: 0 };
+            const articleLabel = info.articleCount > 0 ? `${info.articleCount}篇` : '暂无';
 
-            const levelButtons = exs.map(ex => {
-                const totalD = ex.dictation_count;
-                const doneD = ex.completed_count || 0;
-                let progressBadge = '';
-                if (!this.isGuest && totalD > 0 && doneD > 0) {
-                    progressBadge = `<span class="stage-progress-badge">${doneD}/${totalD} 句</span>`;
-                }
-                return `
-                <button class="level-btn" data-exercise-id="${ex.id}" data-level="${ex.level}">
-                    <span class="level-num">Level ${ex.level}</span>
-                    <span class="level-label">(${totalD}句)</span>
-                    ${progressBadge}
-                </button>
-                `;
-            }).join('');
+            let progressBadge = '';
+            if (!this.isGuest && info.dictationCount > 0 && info.doneCount > 0) {
+                progressBadge = `<span class="level-progress-badge">${info.doneCount}/${info.dictationCount} 句</span>`;
+            }
 
             html += `
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <span class="stage-name">${stage.name}</span>
-                        <span class="stage-desc">${stage.desc}</span>
-                    </div>
-                    <div class="stage-body">${levelButtons}</div>
-                </div>
+                <button class="level-card-btn" data-level="${lv}">
+                    <span class="level-card-num">Level ${lv}</span>
+                    <span class="level-card-articles">${articleLabel}</span>
+                    ${progressBadge}
+                </button>
             `;
-        });
+        }
 
-        this.el.stageContainer.innerHTML = html;
-        this.el.stageContainer.querySelectorAll('.level-btn').forEach(btn => {
-            btn.addEventListener('click', () => this.startExercise(parseInt(btn.dataset.exerciseId)));
+        this.el.levelGrid.innerHTML = html;
+        this.el.levelGrid.querySelectorAll('.level-card-btn').forEach(btn => {
+            btn.addEventListener('click', () => this.showArticles(parseInt(btn.dataset.level)));
         });
+    }
+
+    async showArticles(level) {
+        this.currentLevel = level;
+
+        // Fetch exercises for this level from API (for fresh progress data)
+        let levelExercises = [];
+        try {
+            const resp = await fetch(`${this.apiBase}/api/exercises?level=${level}`);
+            if (resp.ok) {
+                levelExercises = await resp.json();
+            }
+        } catch (e) {
+            // Fallback: filter from local cache
+            levelExercises = this.exercises.filter(ex => ex.level === level);
+        }
+        if (levelExercises.length === 0) {
+            levelExercises = this.exercises.filter(ex => ex.level === level);
+        }
+        levelExercises.sort((a, b) => a.id - b.id);
+
+        this.el.articlesLevelTitle.textContent = `Level ${level} · 文章列表`;
+        if (this.el.articlesStageTag) {
+            this.el.articlesStageTag.textContent = levelExercises.length > 0
+                ? `${levelExercises[0].stage || ''}` : '';
+        }
+
+        let html = '';
+        if (levelExercises.length === 0) {
+            html = '<div class="articles-empty"><p>该级别暂无文章，敬请期待</p></div>';
+        } else {
+            levelExercises.forEach(ex => {
+                const totalD = ex.dictation_count;
+                const doneD = ex.completed_count || 0;
+                const desc = ex.description || '听写练习';
+                html += `
+                <div class="article-card" data-exercise-id="${ex.id}">
+                    <div class="article-card-body">
+                        <h3 class="article-title">${this.escapeHtml(ex.title)}</h3>
+                        <p class="article-desc">${this.escapeHtml(desc)}</p>
+                        <span class="article-meta">${totalD} 句</span>
+                        ${!this.isGuest && doneD > 0 ? `<span class="article-progress">已练 ${doneD}/${totalD} 句</span>` : ''}
+                    </div>
+                    <div class="article-card-arrow">→</div>
+                </div>`;
+            });
+        }
+
+        this.el.articlesContainer.innerHTML = html;
+        this.el.articlesContainer.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('click', () => this.startExercise(parseInt(card.dataset.exerciseId)));
+        });
+        this.showPage(this.el.pageArticles);
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     async startExercise(exerciseId) {
@@ -241,6 +300,7 @@ class DictationApp {
             if (!resp.ok) throw new Error('练习集不存在');
             const data = await resp.json();
             this.currentExercise = data.exercise;
+            this.currentLevel = data.exercise.level;
             this.dictations = data.dictations || [];
             this.currentDictIndex = 0;
             this.results = new Array(this.dictations.length).fill(null);
