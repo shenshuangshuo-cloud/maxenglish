@@ -130,86 +130,64 @@ body {
     text-transform: uppercase;
 }
 
-.stage-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.stage-container,
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
     padding: 0 32px 48px;
 }
 
-/* Stage Card */
-.stage-card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--red);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    transition: box-shadow 0.2s, transform 0.2s;
-}
-
-.stage-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
-
-.stage-header {
-    padding: 20px 24px 12px;
+/* Level Card Button — 3x3 Grid */
+.level-card-btn {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
-}
-
-.stage-name {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-}
-
-.stage-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-}
-
-.stage-body {
-    padding: 0 24px 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-/* Level Button - Pill Style */
-.level-btn {
-    display: inline-flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 20px;
     background: var(--white);
     color: var(--red);
-    border: 1.5px solid var(--red);
-    border-radius: 24px;
+    border: 2px solid var(--red);
+    border-radius: var(--radius);
     font-family: inherit;
-    font-size: 14px;
-    font-weight: 500;
     cursor: pointer;
     transition: all 0.25s;
-    white-space: nowrap;
+    min-height: 140px;
 }
 
-.level-btn:hover {
+.level-card-btn:hover {
     background: var(--red);
     color: var(--white);
-    transform: scale(1.04);
-    box-shadow: 0 4px 12px rgba(229,57,53,0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(229,57,53,0.25);
 }
 
-.level-btn .level-num {
+.level-card-num {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.level-card-articles {
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.75;
+}
+
+.level-progress-badge {
+    display: inline-block;
+    font-size: 11px;
     font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(229,57,53,0.1);
+    color: var(--red);
 }
 
-.level-btn .level-label {
-    font-size: 12px;
-    opacity: 0.7;
+.level-card-btn:hover .level-progress-badge {
+    background: rgba(255,255,255,0.2);
+    color: var(--white);
 }
 
 /* ========== Practice Page ========== */
@@ -723,32 +701,20 @@ body {
     .hero-title { font-size: 24px; }
     .hero-subtitle { font-size: 13px; }
 
-    .stage-container {
+    .stage-container,
+    .level-grid {
         padding: 0 16px 28px;
-        gap: 16px;
+        gap: 14px;
+        grid-template-columns: repeat(3, 1fr);
     }
 
-    .stage-card {
-        border-left-width: 3px;
+    .level-card-btn {
+        padding: 24px 14px;
+        min-height: 110px;
     }
 
-    .stage-header {
-        padding: 14px 16px 10px;
-    }
-
-    .stage-name { font-size: 17px; }
-    .stage-desc { font-size: 12px; }
-
-    .stage-body {
-        padding: 0 16px 14px;
-        gap: 8px;
-    }
-
-    .level-btn {
-        padding: 9px 16px;
-        font-size: 13px;
-        border-radius: 20px;
-    }
+    .level-card-num { font-size: 18px; }
+    .level-card-articles { font-size: 12px; }
 
     /* Articles page - tablet */
     .articles-topbar {
@@ -836,37 +802,22 @@ body {
     .hero-title { font-size: 20px; }
     .hero-subtitle { font-size: 12px; }
 
-    .stage-container {
+    .stage-container,
+    .level-grid {
         padding: 0 14px 24px;
-        gap: 12px;
+        gap: 10px;
+        grid-template-columns: repeat(3, 1fr);
     }
 
-    .stage-card {
+    .level-card-btn {
+        padding: 20px 10px;
+        min-height: 90px;
         border-radius: 10px;
-        border-left-width: 3px;
     }
 
-    .stage-header {
-        padding: 12px 14px 8px;
-    }
-
-    .stage-name { font-size: 16px; }
-    .stage-desc { font-size: 12px; }
-
-    .stage-body {
-        padding: 0 14px 12px;
-        gap: 6px;
-    }
-
-    .level-btn {
-        padding: 10px 16px;
-        font-size: 13px;
-        min-height: 42px;
-        border-radius: 20px;
-    }
-
-    .level-btn .level-label { font-size: 11px; }
-    .stage-progress-badge { font-size: 11px; padding: 2px 6px; }
+    .level-card-num { font-size: 16px; }
+    .level-card-articles { font-size: 11px; }
+    .level-progress-badge { font-size: 10px; padding: 2px 6px; }
 
     /* Articles page - mobile */
 
